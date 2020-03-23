@@ -1,20 +1,43 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}Hello AccueilController!{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>OptiWork</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<body>
+    <div class="container">
+        <h1 class="title">Bienvenue</h1>
+        <div class="separator"></div>
+        <p class="text--top">Ceci est un projet open-source baptisé OptiWork.</p>
+        <ul class="list">
+            <li>
+                <p class="text">Il a pour but de faciliter l'organisation de votre recherche d'emploi.</p>
+            </li>
+            <li>
+                <p class="text">Ce projet est en version Alpha, des bugs peuvent subsister.</p>
+            </li>
+            <li>
+                <p class="text">Vous pouvez faire remonter les bugs via cet adresse : <a href="mailto:aferedye@gmail.com"
+                        class="link link--email">aferedye@gmail.com</a></p>
+            </li>
+            <li>
+                <p class="text">Pour pouvoir acceder au site vous devez vous connecter ou créer un compte.</p>
+            </li>
+        </ul>
+        <div class="separator"></div>
+        <div class="btn-block">
+            <a href="{{ path('accueil') }}"/ class="link link--security">
+                <div class="btn">Se connecter</div>
+            </a>
+            <a href="{{ path('accueil') }}" class="link link--security">
+                <div class="btn">S'inscrire</div>
+            </a>
+        </div>
+    </div>
+</body>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/workOpti/src/Controller/AccueilController.php'|file_link(0) }}">src/Controller/AccueilController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/workOpti/templates/accueil/index.html.twig'|file_link(0) }}">templates/accueil/index.html.twig</a></code></li>
-    </ul>
-</div>
-{% endblock %}
+</html>
