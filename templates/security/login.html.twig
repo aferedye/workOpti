@@ -12,15 +12,8 @@
     <div class="container">
         <h1 class="title">Inscription</h1>
         <div class="separator"></div>
-        <p class="text--top">Veuillez remplir le formulaire pour pouvoir créer votre compte.</p>
+        <p class="text--top">Entrez vos informations pour pouvoir vous connecter.</p>
         <form method="post" class="form">
-            
-        
-            {% if app.user %}
-                <div class="mb-3">
-                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-                </div>
-            {% endif %}
             <label for="inputEmail">
                 <input type="email" placeholder="E-mail" value="{{ last_username }}" name="email" id="inputEmail" class="form--fields" required autofocus>
             </label>
@@ -30,12 +23,6 @@
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
             >
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Se souvenir de moi
-                </label>
-            </div>
-        
             {% if error %}
                 <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -44,7 +31,12 @@
             </button>
         </form>
         <div class="separator separator--register"></div>
-        <p class="text text--register">Vous n'avez pas de compte ? <a href="{{ path('register')}}" class="link link--email">Se connecter</a></p>
+        <p class="text text--register">Vous n'avez pas de compte ? <a href="{{ path('register')}}" class="link link--email">S'inscrire</a></p>
+        {% if app.user %}
+                <div class="text text--register">
+                    Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}" class="link link--email">Se déconnecter</a>
+                </div>
+            {% endif %}
     </div>
     
 </body>
