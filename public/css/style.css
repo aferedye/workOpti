@@ -24,6 +24,9 @@ body {
 .text {
     font-size: 1.3rem;
 }
+.text--register {
+    text-align: center;
+}
 .list {
     margin: auto;
     margin-left: 20px;
@@ -51,6 +54,14 @@ body {
     padding: 10px;
     font-size: 1.5rem;
     border-radius: 2px;
+    height: 30px;
+    width: 150px;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+.btn--form {
+    height: 50px;
+    margin-top: 10px;
 }
 .btn:hover {
     background-color: #4339d1;
@@ -61,4 +72,31 @@ body {
     height: 1px;
     background-color: black;
     margin: auto;
+}
+.separator--register {
+    margin-top: 100px;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+}
+.form--fields {
+    margin-top: 15px;
+    width: 200px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+}
+.error {
+    color: brown;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.error > ul {
+    list-style-type: none;
+    padding-left: 0;
 }
