@@ -1,20 +1,49 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}Hello SecurityController!{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<body>
+    <div class="container">
+        <h1 class="title">Inscription</h1>
+        <div class="separator"></div>
+        <p class="text--top">Veuillez remplir le formulaire pour pouvoir créer votre compte.</p>
+        {{ form_start(form, {'attr': {'class': 'form'}}) }}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+            {{ form_widget(form.email, {
+                'attr': {
+                    'class': 'form--fields',
+                    'placeholder': 'E-mail'
+                }
+            }) }}
+            {{ form_widget(form.password, {
+                'attr': {
+                    'class': 'form--fields',
+                    'placeholder': 'Mot de passe',
+                }
+            }) }}
+            <div class="error">
+                {{ form_errors(form.email) }}
+                {{ form_errors(form.password) }}
+                {{ form_errors(form) }}
+            </div>
+            {{ form_widget(form.submit, {
+                'label': 'S\'inscrire',
+                'attr': {
+                    'class': 'btn btn--form',
+                }
+            }) }}
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+        <div class="separator separator--register"></div>
+        <p class="text text--register">Vous avez déjà un compte ? <a href="{{ path('login')}}" class="link link--email">Se connecter</a></p>
+    </div>
+    
+</body>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/workOpti/src/Controller/SecurityController.php'|file_link(0) }}">src/Controller/SecurityController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/workOpti/templates/security/index.html.twig'|file_link(0) }}">templates/security/index.html.twig</a></code></li>
-    </ul>
-</div>
-{% endblock %}
+</html>
