@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Inscription</h1>
+        <div class="separator"></div>
+        <p class="text--top">Veuillez remplir le formulaire pour pouvoir créer votre compte.</p>
+        <form method="post" class="form">
+            
+        
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
+            <label for="inputEmail">
+                <input type="email" placeholder="E-mail" value="{{ last_username }}" name="email" id="inputEmail" class="form--fields" required autofocus>
+            </label>
+            <label for="inputPassword">
+                <input type="password" placeholder="Mot de passe" name="password" id="inputPassword" class="form--fields" required>
+            </label>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                </label>
+            </div>
+        
+            {% if error %}
+                <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <button class="btn btn--form" type="submit">
+                Connexion
+            </button>
+        </form>
+        <div class="separator separator--register"></div>
+        <p class="text text--register">Vous n'avez pas de compte ? <a href="{{ path('register')}}" class="link link--email">Se connecter</a></p>
+    </div>
+    
+</body>
+
+</html>
+
+
