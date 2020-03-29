@@ -1,20 +1,230 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PanelController!{% endblock %}
+{% block title %}OptiWork Panel{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container container--entreprise">
+    <div class="entreprise--nav">
+        <form action="GET">
+            <input type="text" placeholder="Recherche.." class="field--search" autocomplete="off" >
+        </form>
+        <div id="results">
+            <div>Résultat 1</div>
+            <div>Résultat 2</div>
+        </div>
+        <div class="blocknew" id="blockcontact">
+            <img src="{{ asset('image/icon/plus.png')}}" alt="" class="iconnew" id="iconcontact">
+            <p class="textnew" id="textcontact">Ajout Contact</p>
+        </div>
+        <div class="blocknew" id="blockenterprise">
+            <img src="{{ asset('image/icon/plus.png')}}" alt="" class="iconnew" id="iconenterprise">
+            <p class="textnew" id="textenterprise">Ajout Entreprise</p>
+        </div>
+    </div>
+    <div class="separator separator--enterprise"></div>
+    <div class="newenterprise" id="newenterprise">
+        <h1 class="title title--enterprise">Ajouter une Entreprise</h1>
+        {{ form_start(form, {'attr': {'class': 'form--enterprise'}}) }}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        {{ form_widget(form.societyname, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-name',
+                'placeholder': 'Nom de la société ..',
+                'id': 'field-name'
+            }
+        })}}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/workOpti/src/Controller/PanelController.php'|file_link(0) }}">src/Controller/PanelController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/workOpti/templates/panel/index.html.twig'|file_link(0) }}">templates/panel/index.html.twig</a></code></li>
-    </ul>
+        {{ form_widget(form.adresse, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-adresse',
+                'placeholder': 'Adresse Postale ..',
+                'id': 'field-adresse'
+            }
+        })}}
+
+        {{ form_widget(form.site, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-site',
+                'placeholder': 'Site internet ..',
+                'id': 'field-site'
+            }
+        })}}
+
+        {{ form_widget(form.vision, {
+            'attr': {
+                'class': 'form--fields form--fieldsarea field-vision',
+                'placeholder': 'Vision de la société ..',
+                'id': 'field-vision',
+                'novalidate': 'novalidate'
+            }
+        })}}
+        {{ form_row(form._token) }}
+        {{ form_widget(form.submit, {
+            'id': 'submitsociety',
+            'label': 'Ajouter',
+            'attr': {
+                'class': 'btn btn--enterprise',
+            }
+        })}}
+
+        {{ form_end(form) }}
+    </div>
+    <div class="newcontact" id="newcontact">
+        <h1 class="title title--enterprise">Ajouter un Contact</h1>
+        <form action="" class="form--enterprise">
+            <label>
+                <input type="text" class="form--fields form--fieldsmain" placeholder="Nom du Contact ..">
+            </label>
+            <label>
+                <input type="text" class="form--fields form--fieldsmain" placeholder="Adresse E-mail ..">
+            </label>
+            <label>
+                <input type="text" class="form--fields form--fieldsmain" placeholder="Téléphone ..">
+            </label>
+            <label>
+                <input type="text" class="form--fields form--fieldsmain" placeholder="Poste ..">
+            </label>
+            <label>
+                <input type="text" class="form--fields form--fieldsmain" placeholder="Société ..">
+            </label>
+            
+        </form>
+    </div>
+
+    <div class="load">
+        <div class="ajax-img">
+            <img src="{{ asset('image/Spinner-1s-200px.gif') }}" alt="">
+        </div>
+        <p>Veuillez patienter...</p>
+    </div>
+    <div class="succes">
+        <div class="ajax-img">
+            <img src="{{ asset('image/succes.png') }}" alt="">
+        </div>
+        <p>L'entreprise est bien enregister dans la base de données.</p>
+        <p class="end-closebook" id="endform">Retour au site</p>
+    </div>
+    <div class="error">
+        <div class="ajax-img">
+            <img src="{{ asset('image/error.png') }}" alt="">
+        </div>
+        <p>Votre demande n'a pas pu être traité. Veuillez nous contacter via :</p>
+        <br />
+        <p>Téléphone : <a href="tel:0620763448">0620763448</a></p>
+        <p>E-mail : <a href="mailto:aferedye@gmail.com">aferedye@gmail.com</a></p>
+        <br />
+        <p class="js-closebook end-closebook">Retour au formulaire</p>
+    </div>
 </div>
+
+{% endblock %}
+{% block javascripts %}
+<script>
+    let btncontact = document.getElementById('blockcontact');
+    let btnenterprise = document.getElementById('blockenterprise');
+    let iconcontact = document.getElementById('iconcontact');
+    let iconenterprise = document.getElementById('iconenterprise');
+    let textenterprise = document.getElementById('textenterprise');
+    let textcontact = document.getElementById('textcontact');
+    let blockEntreprise = document.getElementById('newenterprise');
+    let blockContact = document.getElementById('newcontact');
+    
+    btnenterprise.addEventListener('mouseenter', function() {
+        iconenterprise.setAttribute('src', "{{ asset('image/icon/plusHover.png')}}");
+        textenterprise.style.color = "#4339d1";
+        blockenterprise.style.border = "2px solid #4339d1";
+    });
+
+    btnenterprise.addEventListener('mouseleave', function() {
+        iconenterprise.setAttribute('src', "{{ asset('image/icon/plus.png')}}");
+        textenterprise.style.color = "black";
+        blockenterprise.style.border = "2px solid black";
+    });
+
+    btnenterprise.addEventListener('click', function() {
+        blockEntreprise.style.display = "block";
+        blockContact.style.display = "none";
+    });
+
+    btncontact.addEventListener('click', function() {
+        blockEntreprise.style.display = "none";
+        blockContact.style.display = "block";
+    });
+
+    btncontact.addEventListener('mouseenter', function() {
+        iconcontact.setAttribute('src', "{{ asset('image/icon/plusHover.png')}}");
+        textcontact.style.color = "#4339d1";
+        blockcontact.style.border = "2px solid #4339d1";
+    });
+
+    btncontact.addEventListener('mouseleave', function() {
+        iconcontact.setAttribute('src', "{{ asset('image/icon/plus.png')}}");
+        textcontact.style.color = "black";
+        blockcontact.style.border = "2px solid black";
+    });
+
+    let submitSociety = document.getElementById('submitsociety');
+
+    submitSociety.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        let name = document.querySelector('.field-name').value; 
+        let adresse = document.querySelector('.field-adresse').value;
+        let site = document.querySelector('.field-site').value;
+        let vision = document.querySelector('.field-vision').value;
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onloadstart = onLoad;
+        xhr.onloadend = onSucces;
+
+        xhr.open("POST", "/panel/addSociety", true);
+        let form = new FormData();
+        form.append('societyname', name);
+        form.append('adresse', adresse);
+        form.append('site', site);
+        form.append('vision', vision);
+            
+        xhr.send(form);
+
+    });
+
+    let load = document.querySelector('.load');
+    let succes = document.querySelector('.succes');
+    let error = document.querySelector('.error');
+    let closeerror = document.querySelector('.js-closebook');
+    let closesucces = document.getElementById('endform');
+
+    
+    closeerror.addEventListener('click', function() {
+        error.style.display = "none";
+        blockEntreprise.style.display = "block";
+    });
+
+    closesucces.addEventListener('click', function() {
+        succes.style.display = "none";
+        blockEntreprise.style.display = "block";
+    });
+    
+
+    function onLoad(event) {
+        
+        blockEntreprise.style.display= "none";
+        load.style.display= "flex";
+    };
+
+    function onSucces(event) {
+        if (this.readyState === 4 && this.status === 200) {
+            setTimeout(function () {
+                load.style.display = "none";
+                succes.style.display = "flex";
+            }, 1000);
+        } else {
+            setTimeout(function () {
+                load.style.display = "none";
+                error.style.display = "block";
+            }, 1000);
+    }};
+
+</script>
 {% endblock %}

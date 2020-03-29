@@ -2,11 +2,106 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/style.css')}}">
+        <link rel="stylesheet" href="{{ asset('css/animate.css')}}">
+        <title>{% block title %}OptiWork{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        <nav class="naviguation">
+            <div class="navblock" id="blockpanel">
+                <img src="{{ asset('image/icon/panel.png')}}" alt="" class="navblock--logo" id="iconpanel">
+                <p class="navblock--text">Panel</p>
+            </div>
+            <div class="navblock" id="blockwork">
+                <img src="{{ asset('image/icon/work.png') }}" alt="" class="navblock--logo" id="iconwork">
+                <p class="navblock--text">Fiche</p>
+            </div>
+            <div class="navblock" id="blockblog">
+                <img src="{{ asset('image/icon/blog.png') }}" alt="" class="navblock--logo navblock--logolast" id="iconblog">
+                <p class="navblock--text">Postuler</p>
+            </div>
+            <a href="{{ path('app_logout') }}" class="logout--deco">
+                <div class="navblock" id="blocklogout">
+                    <img src="{{ asset('image/icon/logout.png') }}" alt="" class="navblock--logo" id="iconlogout">
+                    <p class="navblock--text">Déconnexion</p>
+                </div>
+            </a>
+        </nav>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
+        <script>
+            let blockPanel = document.getElementById('blockpanel');
+            let iconPanel = document.getElementById('iconpanel')
+            let blockWork = document.getElementById('blockwork');
+            let iconWork = document.getElementById('iconwork');
+            let blockBlog = document.getElementById('blockblog');
+            let iconBlog = document.getElementById('iconblog');
+            let blockLogout = document.getElementById('blocklogout');
+            let iconLogout = document.getElementById('iconlogout');
+            let texts = document.querySelectorAll('.navblock--text');
+            let nav = document.querySelector('.naviguation')
+
+            nav.addEventListener('mouseenter', function() {
+
+                blockPanel.addEventListener('mouseenter', function() {
+                    iconPanel.setAttribute("src", "{{ asset('image/icon/panelHover.png') }}");
+                    texts[0].style.color = "#4339d1";
+                });
+
+                blockPanel.addEventListener('mouseleave', function() {
+                    iconPanel.setAttribute("src", "{{ asset('image/icon/panel.png')}}");
+                    texts[0].style.color = "black";
+                });
+
+                blockWork.addEventListener('mouseenter', function() {
+                    iconWork.setAttribute("src", "{{ asset('image/icon/workHover.png')}}")
+                    texts[1].style.color = "#4339d1";
+                });
+    
+                blockWork.addEventListener('mouseleave', function() {
+                    iconWork.setAttribute("src", "{{ asset('image/icon/work.png')}}")
+                    texts[1].style.color = "black";
+                });
+    
+                blockBlog.addEventListener('mouseenter', function() {
+                    iconBlog.setAttribute("src", "{{ asset('image/icon/blogHover.png')}}")
+                    texts[2].style.color = "#4339d1";
+                });
+    
+                blockBlog.addEventListener('mouseleave', function() {
+                    iconBlog.setAttribute("src", "{{ asset('image/icon/blog.png')}}")
+                    texts[2].style.color = "black";
+                });
+
+                blockLogout.addEventListener('mouseenter', function() {
+                    texts[3].style.color = "red";
+                });
+
+                blockLogout.addEventListener('mouseleave', function() {
+                    texts[3].style.color = "black";
+                });
+
+                
+                    nav.style.width = "285px";
+                    nav.style.transition = "all 1s";
+
+                    for(text of texts) {
+                        text.classList.add('animated', 'fadeInDown', 'delay-1s')
+                        text.style.display = "block";
+                    }
+                  });
+
+            nav.addEventListener('mouseleave', function() {
+                
+                    for(text of texts) {
+                        
+                        text.style.display = "none";
+                    } 
+                    
+                    nav.style.width = "145px";
+                    nav.style.transition = "all 1.5s";
+            });
+        </script>
     </body>
 </html>
