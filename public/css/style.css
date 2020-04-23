@@ -295,3 +295,34 @@ label {
     margin-left: auto;
     margin-right: auto;
 }
+.result-search {
+    display: none;
+    width: 240px;
+    list-style-type: none;
+}
+.nav-second-level {
+    margin: auto;
+    list-style-type: none;
+    border-left: 2px solid #4339d1;
+    border-right: 2px solid #4339d1;
+    border-bottom: 2px solid #4339d1;
+    width: 240px;
+    border-radius: 2px;
+}
+.block-search {
+    width: 250px;
+}
+.search-link {
+    text-decoration: none;
+    color: black;
+}
+.search-link:hover {
+    color:  #4339d1;
+}
+.search-list {
+    padding-top: 5px;
+    padding-left: 2px;
+}
+.search-list:hover {
+    background-color: dodgerblue;
+}
