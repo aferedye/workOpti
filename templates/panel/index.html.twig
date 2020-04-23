@@ -5,12 +5,20 @@
 {% block body %}
 <div class="container container--entreprise">
     <div class="entreprise--nav">
-        <form action="GET">
-            <input type="text" placeholder="Recherche.." class="field--search" autocomplete="off" >
-        </form>
-        <div id="results">
-            <div>Résultat 1</div>
-            <div>Résultat 2</div>
+        <div class="block-search">
+            <div class="sidebar-search">
+                <div class="input-group custom-search-form">
+                    <input type="text" id="search" class="field--search" placeholder="Recherche...">
+                </div>
+                <!-- /input-group -->
+            </div>
+            <ul class="result-search" id="side-menu">
+                <li>
+                    <a href="#"><span class="fa"></span></a>
+                    <ul class="nav-second-level" id="entitiesNav">
+                    </ul>
+                </li>
+            </ul>
         </div>
         <div class="blocknew" id="blockcontact">
             <img src="{{ asset('image/icon/plus.png')}}" alt="" class="iconnew" id="iconcontact">
@@ -225,6 +233,53 @@
                 error.style.display = "block";
             }, 1000);
     }};
-
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        var searchRequest = null;
+        $("#search").keyup(function() {
+            var minlength = 3;
+            var that = this;
+            var value = $(this).val();
+            var entitySelector = $("#entitiesNav").html('');
+            var search = document.getElementById('side-menu');
+            var input = document.getElementById('search');
+            if (value.length >= minlength ) {
+                if (searchRequest != null)
+                    searchRequest.abort();
+                searchRequest = $.ajax({
+                    type: "GET",
+                    url: "{{ path('ajax_search') }}",
+                    data: {
+                        'q' : value
+                    },
+                    dataType: "text",
+                    success: function(msg){
+                        //we need to check if the value is the same
+                        search.style.display = "block";
+                        input.onblur = function() {
+                            search.style.display= "none";
+                        }
+                        if (value==$(that).val()) {
+                            var result = JSON.parse(msg);
+                            $.each(result, function(key, arr) {
+                                $.each(arr, function(id, value) {
+                                    if (key == 'entities') {
+                                        if (id != 'error') {
+                                            entitySelector.append('<li class="search-list"><a href="/daten/'+id+'" class="search-link">'+value+'</a></li>');
+                                            
+                                        } else {
+                                            entitySelector.append('<li class="errorLi">'+value+'</li>');
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                     }
+                });
+            }
+        });
+    });
 </script>
 {% endblock %}
