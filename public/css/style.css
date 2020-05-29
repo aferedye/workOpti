@@ -10,7 +10,7 @@ body {
     display: flex;
 }
 .container {
-    margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+    margin-top: 55vh; /* poussé de la moitié de hauteur de viewport */
     transform: translateY(-55%);
     margin-left: auto;
     margin-right: auto;
@@ -204,7 +204,6 @@ label {
 .iconnew {
     width: 40px;
     height: 40px;
-    border-radius: 200px;
     margin-left: 8px;
 }
 .entreprise--nav {
@@ -324,5 +323,90 @@ label {
     padding-left: 2px;
 }
 .search-list:hover {
-    background-color: dodgerblue;
+    background-color: rgba(67, 57, 209, 0.3);
 }
+.succestext {
+    margin-top: 10px;
+}
+.end-closebook {
+    margin-top: 50px;
+}
+.select-selected {
+    background-color: rgba(67, 57, 209, 0.3);
+  }
+.field-society {
+   appearance: none;
+}
+#listpage {
+    display: none;
+    margin-top: 100px;
+    margin: auto;
+    width: 800px;
+    height: 90%;
+    font-size: 1.6em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+.btn--list {
+    width: 75px;
+    height: 35px;
+    font-size: 1rem;
+    padding: 1px;
+    text-align: center;
+    margin: auto;
+}
+table {
+    margin-top: 20px;
+    width: 800px;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+.title--list {
+    background-color: #4339d1;
+    color: white;
+    padding: 10px;
+}
+.society-list {
+    display: flex;
+    list-style-type: none;
+    width: 100%;
+    justify-content: space-evenly;
+   
+}
+.society-list:hover {
+    background-color: rgba(67, 57, 209, 0.3);
+}
+.list--first {
+    display: table-cell;
+    width: 250px;
+    padding-top: 15px;
+    font-size: 1.2rem;
+    height: max-content;
+}
+.list--last {
+    width: 75px;
+    padding: 10px;
+    display: table-cell;
+}
+.hidden {
+    display: none;
+}
+#paginationContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: auto;
+    width: max-content;
+}
+.white {
+    background-color: white;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.society-list > div {
+    display: flex;
+    flex-direction: column-reverse;
+}
+#blocFiche {
+    display: none;
+}
+
