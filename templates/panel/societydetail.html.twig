@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}OptiWork Panel{% endblock %}
+
+{% block body %}
+    <a href="{{ path('panel')}}" data-return="">Retour</a>
+<div>
+    <table>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>Nom de la société :</td>
+                <td>{{ result.societyname }}</td>
+            </tr>
+            <tr>
+                <td>Site web :</td>
+                <td>{{ result.site }}</td>
+            </tr>
+            <tr>
+                <td>Adresse :</td>
+                <td>{{ result.adresse }}</td>
+            </tr>
+            <tr>
+                <td>Vision :</td>
+                <td>{{ result.vision }}</td>
+            </tr>
+            {% for contact in result.contacts %}
+            <p>{{ contact.nom}}</p>
+            <p>{{ contact.email}}</p>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
