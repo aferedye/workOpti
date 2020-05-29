@@ -49,20 +49,17 @@ class SocietyRepository extends ServiceEntityRepository
     */
 
     /**
-     * @param string $name
+     * @param string $needle
      *
      * @return array
      */
-    public function findLike($name)
+    public function findLike($needle)
     {
         return $this
             ->createQueryBuilder('a')
-            ->where('a.name LIKE :name')
-            ->setParameter( 'name', "%$name%")
-            ->orderBy('a.name')
-            ->setMaxResults(5)
+            ->where('a.societyname LIKE :needle')
+            ->setParameter( 'needle', "%".$needle."%")
             ->getQuery()
-            ->execute()
-            ;
+            ->getResult();
     }
 }
