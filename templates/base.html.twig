@@ -40,7 +40,8 @@
             let blockLogout = document.getElementById('blocklogout');
             let iconLogout = document.getElementById('iconlogout');
             let texts = document.querySelectorAll('.navblock--text');
-            let nav = document.querySelector('.naviguation')
+            let nav = document.querySelector('.naviguation');
+            let blocFiche = document.getElementById('blocFiche');
 
             nav.addEventListener('mouseenter', function() {
 
@@ -57,6 +58,10 @@
                 blockWork.addEventListener('mouseenter', function() {
                     iconWork.setAttribute("src", "{{ asset('image/icon/workHover.png')}}")
                     texts[1].style.color = "#4339d1";
+                });
+
+                blockWork.addEventListener('click', function() {
+                    blocFiche.style.display = "block";
                 });
     
                 blockWork.addEventListener('mouseleave', function() {
