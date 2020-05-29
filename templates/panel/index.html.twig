@@ -3,7 +3,7 @@
 {% block title %}OptiWork Panel{% endblock %}
 
 {% block body %}
-<div class="container container--entreprise">
+<div class="container container--entreprise" id="blocFiche">
     <div class="entreprise--nav">
         <div class="block-search">
             <div class="sidebar-search">
@@ -27,6 +27,10 @@
         <div class="blocknew" id="blockenterprise">
             <img src="{{ asset('image/icon/plus.png')}}" alt="" class="iconnew" id="iconenterprise">
             <p class="textnew" id="textenterprise">Ajout Entreprise</p>
+        </div>
+        <div class="blocknew" id="blocklistenterprise">
+            <img src="{{ asset('image/icon/list.png')}}" alt="" class="iconnew" id="iconlist">
+            <p class="textnew" id="textlist">Liste Entreprise</p>
         </div>
     </div>
     <div class="separator separator--enterprise"></div>
@@ -74,31 +78,64 @@
                 'class': 'btn btn--enterprise',
             }
         })}}
+        <input type="reset" value="Reset" class="btn btn--enterprise">
 
         {{ form_end(form) }}
     </div>
     <div class="newcontact" id="newcontact">
         <h1 class="title title--enterprise">Ajouter un Contact</h1>
-        <form action="" class="form--enterprise">
-            <label>
-                <input type="text" class="form--fields form--fieldsmain" placeholder="Nom du Contact ..">
-            </label>
-            <label>
-                <input type="text" class="form--fields form--fieldsmain" placeholder="Adresse E-mail ..">
-            </label>
-            <label>
-                <input type="text" class="form--fields form--fieldsmain" placeholder="Téléphone ..">
-            </label>
-            <label>
-                <input type="text" class="form--fields form--fieldsmain" placeholder="Poste ..">
-            </label>
-            <label>
-                <input type="text" class="form--fields form--fieldsmain" placeholder="Société ..">
-            </label>
-            
-        </form>
-    </div>
+        {{ form_start(formContact, {'attr': {'class': 'form--enterprise'}}) }}
 
+        {{ form_widget(formContact.nom, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-nom',
+                'placeholder': 'Nom du Contact ..',
+                'id': 'field-nom'
+            }
+        })}}
+
+        {{ form_widget(formContact.email, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-email',
+                'placeholder': 'Adresse E-mail ..',
+                'id': 'field-email'
+            }
+        })}}
+
+        {{ form_widget(formContact.telephone, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-telephone',
+                'placeholder': 'Téléphone ..',
+                'id': 'field-telephone'
+            }
+        })}}
+
+        {{ form_widget(formContact.poste, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-poste',
+                'placeholder': 'Poste ..',
+                'id': 'field-poste',
+                'novalidate': 'novalidate'
+            }
+        })}}
+
+        {{ form_widget(formContact.society, {
+            'attr': {
+                'class': 'form--fields form--fieldsmain field-society',
+                'placeholder': 'Société ..',
+                'id': 'field-society',
+                'novalidate': 'novalidate'
+            }
+        })}}
+
+        {{ form_widget(formContact.submit, {
+            'id': 'submitcontact',
+            'label': 'Ajouter',
+            'attr': {
+                'class': 'btn btn--enterprise',
+            }
+        })}}
+    </div>
     <div class="load">
         <div class="ajax-img">
             <img src="{{ asset('image/Spinner-1s-200px.gif') }}" alt="">
@@ -109,8 +146,8 @@
         <div class="ajax-img">
             <img src="{{ asset('image/succes.png') }}" alt="">
         </div>
-        <p>L'entreprise est bien enregister dans la base de données.</p>
-        <p class="end-closebook" id="endform">Retour au site</p>
+        <p class="succestext">L'entreprise est bien enregister dans la base de données.</p>
+        <p class="end-closebook btn" id="endform">Retour</p>
     </div>
     <div class="error">
         <div class="ajax-img">
@@ -121,62 +158,154 @@
         <p>Téléphone : <a href="tel:0620763448">0620763448</a></p>
         <p>E-mail : <a href="mailto:aferedye@gmail.com">aferedye@gmail.com</a></p>
         <br />
-        <p class="js-closebook end-closebook">Retour au formulaire</p>
+        <p class="js-closebook end-closebook btn">Retour</p>
+    </div>
+    <div id="listpage">
+        <h1 class="title title--enterprise title--list">Liste des sociétés</h1>
+        <div id="societyList">
+            <!-- HTML générer par JS -->
+        </div>
+        <div id="paginationContainer"></div>
     </div>
 </div>
 
 {% endblock %}
 {% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{{ asset('js/function.js') }}"></script>
+
+
 <script>
     let btncontact = document.getElementById('blockcontact');
     let btnenterprise = document.getElementById('blockenterprise');
+    let btnlist = document.getElementById('blocklistenterprise');
     let iconcontact = document.getElementById('iconcontact');
     let iconenterprise = document.getElementById('iconenterprise');
+    let iconlist = document.getElementById('iconlist');
     let textenterprise = document.getElementById('textenterprise');
     let textcontact = document.getElementById('textcontact');
+    let textlist = document.getElementById('textlist');
     let blockEntreprise = document.getElementById('newenterprise');
     let blockContact = document.getElementById('newcontact');
+    let blockList = document.getElementById('listpage');
+    let succes = document.querySelector('.succes');
+    let error = document.querySelector('.error');
+    let load = document.querySelector('.load');
+    let closeerror = document.querySelector('.js-closebook');
+    let closesucces = document.getElementById('endform');
+
+    const p = new Promise((resolve, reject) => {
+        console.log("Starting promise");
+        });
     
-    btnenterprise.addEventListener('mouseenter', function() {
+
+    btnenterprise.addEventListener('mouseenter', function () {
         iconenterprise.setAttribute('src', "{{ asset('image/icon/plusHover.png')}}");
         textenterprise.style.color = "#4339d1";
         blockenterprise.style.border = "2px solid #4339d1";
     });
-
-    btnenterprise.addEventListener('mouseleave', function() {
+    btnenterprise.addEventListener('mouseleave', function () {
         iconenterprise.setAttribute('src', "{{ asset('image/icon/plus.png')}}");
         textenterprise.style.color = "black";
         blockenterprise.style.border = "2px solid black";
     });
-
-    btnenterprise.addEventListener('click', function() {
+    btnenterprise.addEventListener('click', function () {
         blockEntreprise.style.display = "block";
         blockContact.style.display = "none";
+        blockList.style.display = "none";
+        succes.style.display = "none";
+        error.style.display = "none";
     });
 
-    btncontact.addEventListener('click', function() {
+    btncontact.addEventListener('click', function () {
         blockEntreprise.style.display = "none";
         blockContact.style.display = "block";
+        blockList.style.display = "none";
+        succes.style.display = "none";
+        error.style.display = "none";
     });
-
-    btncontact.addEventListener('mouseenter', function() {
+    btncontact.addEventListener('mouseenter', function () {
         iconcontact.setAttribute('src', "{{ asset('image/icon/plusHover.png')}}");
         textcontact.style.color = "#4339d1";
         blockcontact.style.border = "2px solid #4339d1";
     });
-
-    btncontact.addEventListener('mouseleave', function() {
+    btncontact.addEventListener('mouseleave', function () {
         iconcontact.setAttribute('src', "{{ asset('image/icon/plus.png')}}");
         textcontact.style.color = "black";
         blockcontact.style.border = "2px solid black";
     });
 
+    btnlist.addEventListener('mouseenter', function () {
+        iconlist.setAttribute('src', "{{ asset('image/icon/listHover.png')}}");
+        textlist.style.color = "#4339d1";
+        btnlist.style.border = "2px solid #4339d1";
+    });
+    btnlist.addEventListener('mouseleave', function () {
+        iconlist.setAttribute('src', "{{ asset('image/icon/list.png')}}");
+        textlist.style.color = "black";
+        btnlist.style.border = "2px solid black";
+    });
+    btnlist.addEventListener('click', function () {
+        blockEntreprise.style.display = "none";
+        blockContact.style.display = "none";
+        blockList.style.display = "block";
+        succes.style.display = "none";
+        error.style.display = "none";
+    });
+
+    closeerror.addEventListener('click', function () {
+        error.style.display = "none";
+        blockEntreprise.style.display = "block";
+    });
+    closesucces.addEventListener('click', function () {
+        succes.style.display = "none";
+        blockEntreprise.style.display = "block";
+    });
+   
+
+
+    const xhrlist = new XMLHttpRequest();
+
+    xhrlist.onreadystatechange = function () {
+
+        //Conversion des données en JSON -> Calcul du nombre d'entrée -> Calcul du nombre de page.
+        if (xhrlist.readyState == 4 && xhrlist.status == 200) {
+
+            const json = this.responseText;
+            const obj = JSON.parse(json);
+            let nbrResult = ObjectLength_Modern(obj);
+            let entierArrondiDizaine = Math.ceil(nbrResult/10) * 10;
+            let sliceResult = entierArrondiDizaine / 10;
+
+
+            console.log(sliceResult)
+            
+           
+            //Boucle pour incrémenter dynamiquement les données rendu avec la fonction nbrPage()
+            for (let i = 0; sliceResult > i; i++) {
+                let sliceVar = i * 10;
+                let result = obj.splice(sliceVar, 10);
+               
+                nbrPage(sliceVar, this.responseText);
+            }
+        }
+    };
+
+    xhrlist.open("GET", "/society/list", true);
+    xhrlist.send();
+
+
+    /*
+
+    Ajout d'une société à la BDD via une rêquete AJAX.
+
+    */
     let submitSociety = document.getElementById('submitsociety');
 
-    submitSociety.addEventListener('click', function(event) {
+    submitSociety.addEventListener('click', function (event) {
         event.preventDefault();
 
-        let name = document.querySelector('.field-name').value; 
+        let name = document.querySelector('.field-name').value;
         let adresse = document.querySelector('.field-adresse').value;
         let site = document.querySelector('.field-site').value;
         let vision = document.querySelector('.field-vision').value;
@@ -192,91 +321,93 @@
         form.append('adresse', adresse);
         form.append('site', site);
         form.append('vision', vision);
-            
+
         xhr.send(form);
 
     });
 
-    let load = document.querySelector('.load');
-    let succes = document.querySelector('.succes');
-    let error = document.querySelector('.error');
-    let closeerror = document.querySelector('.js-closebook');
-    let closesucces = document.getElementById('endform');
 
-    
-    closeerror.addEventListener('click', function() {
-        error.style.display = "none";
-        blockEntreprise.style.display = "block";
+    /*
+
+    Ajout d'un contact à la BDD via une rêquete AJAX.
+
+    */
+    let submitContact = document.getElementById('submitcontact');
+
+    submitContact.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        let nom = document.querySelector('.field-nom').value;
+        let email = document.querySelector('.field-email').value;
+        let telephone = document.querySelector('.field-telephone').value;
+        let poste = document.querySelector('.field-poste').value;
+        let society = document.querySelector('.field-society').value;
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onloadstart = onLoadContact;
+        xhr.onloadend = onSuccesContact;
+
+        xhr.open("POST", "/panel/addContact", true);
+        let form = new FormData();
+        form.append('nom', nom);
+        form.append('email', email);
+        form.append('telephone', telephone);
+        form.append('poste', poste);
+        form.append('society', society);
+
+        xhr.send(form);
+
     });
-
-    closesucces.addEventListener('click', function() {
-        succes.style.display = "none";
-        blockEntreprise.style.display = "block";
-    });
-    
-
-    function onLoad(event) {
-        
-        blockEntreprise.style.display= "none";
-        load.style.display= "flex";
-    };
-
-    function onSucces(event) {
-        if (this.readyState === 4 && this.status === 200) {
-            setTimeout(function () {
-                load.style.display = "none";
-                succes.style.display = "flex";
-            }, 1000);
-        } else {
-            setTimeout(function () {
-                load.style.display = "none";
-                error.style.display = "block";
-            }, 1000);
-    }};
 </script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
 <script type="text/javascript">
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
         var searchRequest = null;
-        $("#search").keyup(function() {
+        $("#search").keyup(function () {
             var minlength = 3;
             var that = this;
             var value = $(this).val();
             var entitySelector = $("#entitiesNav").html('');
             var search = document.getElementById('side-menu');
             var input = document.getElementById('search');
-            if (value.length >= minlength ) {
+            if (value.length >= minlength) {
                 if (searchRequest != null)
                     searchRequest.abort();
                 searchRequest = $.ajax({
                     type: "GET",
                     url: "{{ path('ajax_search') }}",
                     data: {
-                        'q' : value
+                        'q': value
                     },
                     dataType: "text",
-                    success: function(msg){
+                    success: function (msg) {
                         //we need to check if the value is the same
                         search.style.display = "block";
-                        input.onblur = function() {
-                            search.style.display= "none";
+                        input.onblur = function () {
+                            search.style.display = "none";
                         }
-                        if (value==$(that).val()) {
+                        if (value == $(that).val()) {
                             var result = JSON.parse(msg);
-                            $.each(result, function(key, arr) {
-                                $.each(arr, function(id, value) {
+                            $.each(result, function (key, arr) {
+                                $.each(arr, function (id, value) {
                                     if (key == 'entities') {
                                         if (id != 'error') {
-                                            entitySelector.append('<li class="search-list"><a href="/daten/'+id+'" class="search-link">'+value+'</a></li>');
-                                            
+                                            entitySelector.append(
+                                                '<li class="search-list"><a href="/daten/' +
+                                                id +
+                                                '" class="search-link">' +
+                                                value + '</a></li>');
+
                                         } else {
-                                            entitySelector.append('<li class="errorLi">'+value+'</li>');
+                                            entitySelector.append(
+                                                '<li class="errorLi">' +
+                                                value + '</li>');
                                         }
                                     }
                                 });
                             });
                         }
-                     }
+                    }
                 });
             }
         });
