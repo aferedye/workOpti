@@ -169,7 +169,24 @@
     </div>
 </div>
 <div class="container container--entreprise" id="blocblog">
-    <h1>Works</h1>
+    <h1>Nouvelle Candidature</h1>
+    {{ form_start(formCandidature, {'attr': {'class': 'form--enterprise'}}) }}
+
+    {{ form_widget(formCandidature.society, {
+        'attr': {
+            'class': 'form--fields form--fieldsmain field-socname',
+            'placeholder': 'Nom du Contact ..',
+            'id': 'field-socname'
+        }
+    })}}
+
+    {{ form_widget(formCandidature.submit, {
+        'id': 'submitcandidate',
+        'label': 'Je postule !',
+        'attr': {
+            'class': 'btn btn--enterprise',
+        }
+    })}}
 </div>
 
 {% endblock %}
@@ -325,6 +342,31 @@
         form.append('site', site);
         form.append('vision', vision);
 
+        xhr.send(form);
+
+    });
+
+    /*
+
+    Ajout d'une société à la BDD via une rêquete AJAX.
+
+    */
+    let submitCandidate = document.getElementById('submitcandidate');
+
+    submitCandidate.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        let name = document.querySelector('.field-socname').value;
+    
+        const xhr = new XMLHttpRequest();
+
+        xhr.onloadstart = onLoad;
+        xhr.onloadend = onSucces;
+
+        xhr.open("POST", "/panel/addCandidate", true);
+        let form = new FormData();
+        form.append('societyname', name);
+     
         xhr.send(form);
 
     });
