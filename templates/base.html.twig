@@ -42,6 +42,7 @@
             let texts = document.querySelectorAll('.navblock--text');
             let nav = document.querySelector('.naviguation');
             let blocFiche = document.getElementById('blocFiche');
+            let blocBlog = document.getElementById('blocblog');
 
             nav.addEventListener('mouseenter', function() {
 
@@ -62,6 +63,7 @@
 
                 blockWork.addEventListener('click', function() {
                     blocFiche.style.display = "block";
+                    blocBlog.style.display = "none";
                 });
     
                 blockWork.addEventListener('mouseleave', function() {
@@ -77,6 +79,11 @@
                 blockBlog.addEventListener('mouseleave', function() {
                     iconBlog.setAttribute("src", "{{ asset('image/icon/blog.png')}}")
                     texts[2].style.color = "black";
+                });
+
+                blockBlog.addEventListener('click', function() {
+                    blocFiche.style.display = "none";
+                    blocBlog.style.display = "block";
                 });
 
                 blockLogout.addEventListener('mouseenter', function() {
