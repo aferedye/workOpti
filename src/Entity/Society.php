@@ -43,6 +43,11 @@ class Society
      */
     private $contacts;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Candidature", mappedBy="Society", cascade={"persist", "remove"})
+     */
+    private $candidature;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -127,6 +132,23 @@ class Society
             if ($contact->getSociety() === $this) {
                 $contact->setSociety(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getCandidature(): ?Candidature
+    {
+        return $this->candidature;
+    }
+
+    public function setCandidature(Candidature $candidature): self
+    {
+        $this->candidature = $candidature;
+
+        // set the owning side of the relation if necessary
+        if ($candidature->getSociety() !== $this) {
+            $candidature->setSociety($this);
         }
 
         return $this;
