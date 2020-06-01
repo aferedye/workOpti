@@ -18,19 +18,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints as Assert;
-
-
 
 class PanelController extends AbstractController
 {
-    /**
-     * @Assert\DateTime
-     * @var string A "d-m-Y H:i:s" formatted value
-     */
-    public $now;
-  
-
+ 
     /**
      * @Route("/panel", name="panel")
      */
