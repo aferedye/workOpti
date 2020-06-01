@@ -6,8 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\SocietyRepository;
 use App\Repository\ContactRepository;
+use App\Repository\CandidatureRepository;
 use App\Entity\Society;
 use App\Entity\Contact;
+use App\Entity\Candidature;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +18,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 class PanelController extends AbstractController
 {
+    /**
+     * @Assert\DateTime
+     * @var string A "d-m-Y H:i:s" formatted value
+     */
+    public $now;
+  
+
     /**
      * @Route("/panel", name="panel")
      */
@@ -47,11 +59,21 @@ class PanelController extends AbstractController
             ->add('submit', SubmitType::class)
             ->getForm();
 
+        $formCandidature = new Candidature();
+        $candidatureform = $this->createFormBuilder($formCandidature)
+                ->add('society', EntityType::class, [
+                    'class' => Society::class,
+                    'choice_label' => 'societyname'
+                ])
+                ->add('submit', SubmitType::class)
+                ->getForm();
+
         $list = $this->getDoctrine()->getRepository(Society::class)->findAll();
 
         return $this->render('panel/index.html.twig', [
             'form' => $formulaire->createView(),
             'formContact' => $contactform->createView(),
+            'formCandidature' => $contactform->createView(),
             'list' => $list
         ]);
     }
@@ -114,6 +136,37 @@ class PanelController extends AbstractController
 
         return $this->redirectToRoute('panel');
     }
+
+        /**
+     * @return Response
+     * @Route("/panel/addCandidate", name="addCandidate")
+     */
+    public function addCandidate(Request $request)
+    {
+
+        if ($request->getMethod() == 'POST') {
+
+            $societyname = htmlspecialchars($request->request->get('societyname'));
+            $societyID = $this->getDoctrine()->getRepository(Society::class)->find($societyname);
+
+            $now = new \Datetime("now");
+            $interval = new \DateInterval('P1W');
+            $relance = $now->add($interval);
+            
+            $form = new Candidature();
+            $form->setSociety($societyID);
+            $form->setNouvellecandidature(new \Datetime("now"));
+            $form->setRelance($relance);
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($form);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('panel');
+    }
+
+
 
      /**
      * @Route("/panel/society/details", name="society_details")
@@ -209,5 +262,5 @@ class PanelController extends AbstractController
             return json_encode($list_main);
     }
 
-    
+
 }
