@@ -145,13 +145,8 @@ class PanelController extends AbstractController
 
         $result = $this->display_json($lists);
 
-    
-
         return new Response($result);
     }
-
-    
-    
      
  
     /**
@@ -210,9 +205,9 @@ class PanelController extends AbstractController
                 }*/
             array_push($list_main, $list_second, /*$list_third*/);
             }
+
             return json_encode($list_main);
-        
     }
 
- 
+    
 }
